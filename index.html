@@ -29,12 +29,7 @@
             --shadow-lg: 0 25px 50px -12px rgba(13, 148, 136, 0.35);
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Poppins', sans-serif;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
 
         body {
             min-height: 100vh;
@@ -45,334 +40,92 @@
             overflow-x: hidden;
         }
 
-        /* Background decorative elements */
-        body::before {
-            content: '';
-            position: absolute;
-            top: -150px;
-            right: -150px;
-            width: 400px;
-            height: 400px;
-            background: radial-gradient(circle, rgba(20,184,166,0.15) 0%, rgba(20,184,166,0) 70%);
-            border-radius: 50%;
-            z-index: -1;
-        }
-
-        body::after {
-            content: '';
-            position: absolute;
-            bottom: -150px;
-            left: -150px;
-            width: 500px;
-            height: 500px;
-            background: radial-gradient(circle, rgba(15,118,110,0.1) 0%, rgba(15,118,110,0) 70%);
-            border-radius: 50%;
-            z-index: -1;
-        }
-
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 10;
-        }
+        .container { max-width: 1100px; margin: 0 auto; position: relative; z-index: 10; }
 
         /* Glassmorphism Header */
         .main-header {
-            position: sticky;
-            top: 1rem;
-            z-index: 100;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 1.5rem;
-            margin-bottom: 3.5rem;
-            padding: 1.5rem 2rem;
-            background: var(--card-bg);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border-radius: 24px;
-            border: 1px solid var(--card-border);
+            position: sticky; top: 1rem; z-index: 100;
+            display: flex; align-items: center; justify-content: space-between;
+            gap: 1.5rem; margin-bottom: 3.5rem; padding: 1.5rem 2rem;
+            background: var(--card-bg); backdrop-filter: blur(16px);
+            border-radius: 24px; border: 1px solid var(--card-border);
             box-shadow: var(--shadow-md);
-            animation: slideDown 0.8s ease-out;
         }
 
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        .header-logo-left img { width: 100%; max-width: 110px; border-radius: 16px; }
 
-        .header-logo-left {
-            flex: 0 0 120px;
-            display: flex;
-            justify-content: flex-start;
-        }
+        .header-content { flex: 1; text-align: center; }
+        h1 { font-size: 2.2rem; color: var(--primary-dark); }
+        
+        .header-logos-right img { height: 56px; border-radius: 12px; background: #fff; padding: 4px; margin-left: 5px; }
 
-        .header-logo-left img {
-            width: 100%;
-            max-width: 110px;
-            height: auto;
-            border-radius: 16px;
-            box-shadow: var(--shadow-sm);
-            transition: transform 0.3s ease;
-        }
-
-        .header-logo-left img:hover {
-            transform: scale(1.05) rotate(-2deg);
-        }
-
-        .header-content {
-            flex: 1;
-            text-align: center;
-        }
-
-        h1 {
-            font-size: 2.2rem;
-            color: var(--primary-dark);
-            margin-bottom: 0.2rem;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-        }
-
-        .subtitle {
-            color: var(--primary);
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 0.2rem;
-        }
-
-        .subtitle-school {
-            color: var(--text-muted);
-            font-size: 0.95rem;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .header-logos-right {
-            flex: 0 0 auto;
-            display: flex;
-            gap: 0.8rem;
-            align-items: center;
-        }
-
-        .header-logos-right img {
-            height: 56px;
-            width: auto;
-            max-width: 76px;
-            object-fit: contain;
-            border-radius: 12px;
-            background: #fff;
-            padding: 4px;
-            box-shadow: var(--shadow-sm);
-            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        .header-logos-right img:hover {
-            transform: translateY(-5px) scale(1.1);
-        }
-
-        /* Sections Grid */
-        .section {
-            margin-bottom: 2.5rem;
-            animation: fadeIn 1s ease-out both;
-        }
-
-        .section:nth-child(2) { animation-delay: 0.2s; }
-        .section:nth-child(3) { animation-delay: 0.4s; }
-        .section:nth-child(4) { animation-delay: 0.6s; }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .section-header {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 1.2rem;
-            padding-left: 0.5rem;
-        }
-
-        .section-header i {
-            font-size: 1.2rem;
-            color: var(--primary-soft);
-        }
-
-        .section h2 {
-            font-size: 1.25rem;
-            color: var(--primary-dark);
-            font-weight: 600;
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
-        }
-
-        /* Glassmorphism Cards */
-        .card {
-            display: flex;
-            text-decoration: none;
-            background: var(--card-bg);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid var(--card-border);
+        /* Formulario Estilo BTH */
+        .form-registro {
+            background: var(--primary-dark);
+            padding: 20px;
             border-radius: 20px;
-            padding: 1.5rem;
-            color: inherit;
-            box-shadow: var(--shadow-md);
-            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, rgba(20,184,166,0.1) 0%, rgba(20,184,166,0) 100%);
-            opacity: 0;
-            transition: opacity 0.4s ease;
-            z-index: 0;
-        }
-
-        .card:hover {
-            transform: translateY(-8px);
-            box-shadow: var(--shadow-lg);
-            border-color: rgba(20, 184, 166, 0.5);
-        }
-
-        .card:hover::before {
-            opacity: 1;
-        }
-
-        .card-icon {
-            flex: 0 0 50px;
-            height: 50px;
-            background: linear-gradient(135deg, var(--primary), var(--primary-soft));
-            border-radius: 12px;
+            margin-bottom: 25px;
             display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
             align-items: center;
-            justify-content: center;
+            box-shadow: var(--shadow-md);
             color: white;
-            font-size: 1.5rem;
-            margin-right: 1.2rem;
-            z-index: 1;
-            box-shadow: var(--shadow-sm);
-            transition: transform 0.4s ease;
         }
 
-        .card:hover .card-icon {
-            transform: scale(1.1) rotate(5deg);
-        }
-
-        .card-content {
-            flex: 1;
-            z-index: 1;
-        }
-
-        .card-title {
-            font-size: 1.1rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            color: var(--primary-dark);
-            transition: color 0.3s ease;
-        }
-
-        .card:hover .card-title {
-            color: var(--primary);
-        }
-
-        .card-desc {
+        .form-registro h3 { width: 100%; font-size: 1.1rem; margin-bottom: 5px; }
+        
+        .form-registro input, .form-registro select {
+            padding: 12px;
+            border-radius: 10px;
+            border: none;
+            outline: none;
             font-size: 0.9rem;
-            color: var(--text-muted);
-            line-height: 1.5;
         }
 
-        footer {
-            margin-top: 4rem;
-            text-align: center;
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            font-weight: 500;
-            animation: fadeIn 1s ease-out 0.8s both;
-        }
+        .form-registro input { flex: 2; min-width: 200px; }
+        .form-registro select { flex: 1; min-width: 120px; cursor: pointer; }
 
-        /* Responsive Improvements */
-        @media (max-width: 850px) {
-            .main-header {
-                flex-direction: column;
-                padding: 1.5rem;
-                border-radius: 20px;
-                text-align: center;
-            }
-
-            .header-logo-left {
-                justify-content: center;
-                flex: none;
-                margin-bottom: 0.5rem;
-            }
-            
-            .header-logo-left img {
-                max-width: 90px;
-            }
-
-            h1 { font-size: 1.8rem; }
-            .subtitle { font-size: 1rem; }
-
-            .header-logos-right {
-                justify-content: center;
-                flex-wrap: wrap;
-                margin-top: 0.5rem;
-            }
-
-            .header-logos-right img {
-                height: 48px;
-            }
-
-            .grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* Logout Button Styles */
-        .logout-btn {
-            background: linear-gradient(135deg, #ef4444, #dc2626);
+        .btn-save {
+            background: #f39c12;
             color: white;
             border: none;
-            padding: 0.6rem 1.2rem;
-            border-radius: 14px;
-            font-size: 0.85rem;
-            font-weight: 600;
+            padding: 12px 25px;
+            border-radius: 10px;
             cursor: pointer;
+            font-weight: 700;
+            transition: 0.3s;
             display: flex;
             align-items: center;
             gap: 8px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.2);
-            margin-left: 1rem;
         }
 
-        .logout-btn:hover {
-            transform: translateY(-2px) scale(1.02);
-            box-shadow: 0 6px 15px rgba(220, 38, 38, 0.3);
-            background: linear-gradient(135deg, #f87171, #ef4444);
+        .btn-save:hover { background: #e67e22; transform: scale(1.03); }
+
+        /* Grid y Cards */
+        .section { margin-bottom: 2.5rem; }
+        .section-header { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1.2rem; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+
+        .card {
+            display: flex; text-decoration: none; background: var(--card-bg);
+            border: 1px solid var(--card-border); border-radius: 20px;
+            padding: 1.5rem; color: inherit; box-shadow: var(--shadow-sm);
+            transition: 0.3s;
         }
 
-        .logout-btn i {
-            font-size: 0.9rem;
+        .card:hover { transform: translateY(-5px); box-shadow: var(--shadow-md); }
+        .card-icon {
+            width: 50px; height: 50px; background: var(--primary);
+            border-radius: 12px; display: flex; align-items: center;
+            justify-content: center; color: white; margin-right: 1rem;
         }
+
+        .logout-btn { background: #ef4444; color: white; border: none; padding: 10px 20px; border-radius: 12px; cursor: pointer; }
 
         @media (max-width: 850px) {
-            .logout-btn {
-                margin: 1rem auto 0;
-            }
+            .main-header { flex-direction: column; }
+            .form-registro { flex-direction: column; align-items: stretch; }
         }
     </style>
 </head>
@@ -380,7 +133,7 @@
     <div class="container">
         <header class="main-header">
             <div class="header-logo-left">
-                <img src="logo_principal.png" alt="Logo principal">
+                <img src="logo_principal.png" alt="Logo">
             </div>
             <div class="header-content">
                 <h1>Menú Principal</h1>
@@ -388,13 +141,12 @@
                 <p class="subtitle-school">Colegio Tiquipaya</p>
             </div>
             <div class="header-logos-right">
-                <img src="logo_ingles_final.png" alt="Especialidad Inglés" title="Inglés">
-                <img src="logo_sistemas_final.jpg" alt="Especialidad Sistemas" title="Sistemas">
-                <img src="logo_ambiental_final.jpg" alt="Especialidad Gestión ambiental" title="Ambiental">
+                <img src="logo_ingles_final.png" alt="Inglés">
+                <img src="logo_sistemas_final.jpg" alt="Sistemas">
+                <img src="logo_ambiental_final.jpg" alt="Ambiental">
             </div>
-            <button class="logout-btn" onclick="logout()" title="Cerrar Sessión">
-                <i class="fa-solid fa-right-from-bracket"></i>
-                <span>Salir</span>
+            <button class="logout-btn" onclick="logout()">
+                <i class="fa-solid fa-right-from-bracket"></i> Salir
             </button>
         </header>
 
@@ -405,32 +157,17 @@
             </div>
             <div class="grid">
                 <a class="card" href="informe_maquinas.html">
-                    <div class="card-icon">
-                        <i class="fa-solid fa-desktop"></i>
-                    </div>
+                    <div class="card-icon"><i class="fa-solid fa-desktop"></i></div>
                     <div class="card-content">
                         <p class="card-title">Informe de Máquinas</p>
-                        <p class="card-desc">Registro técnico, estado de equipos y préstamos de máquinas.</p>
+                        <p class="card-desc">Registro técnico y estado de equipos.</p>
                     </div>
                 </a>
-
                 <a class="card" href="inventario_robotica.html">
-                    <div class="card-icon">
-                        <i class="fa-solid fa-robot"></i>
-                    </div>
+                    <div class="card-icon"><i class="fa-solid fa-robot"></i></div>
                     <div class="card-content">
                         <p class="card-title">Inventario de Robótica</p>
-                        <p class="card-desc">Control y seguimiento de materiales y equipos de robótica.</p>
-                    </div>
-                </a>
-
-                <a class="card" href="BTH_Inventario_Portatil.html">
-                    <div class="card-icon">
-                        <i class="fa-solid fa-diagram-project"></i>
-                    </div>
-                    <div class="card-content">
-                        <p class="card-title">Proyectos BTH</p>
-                        <p class="card-desc">Consulta y seguimiento de proyectos realizados BTH.</p>
+                        <p class="card-desc">Control de equipos de robótica.</p>
                     </div>
                 </a>
             </div>
@@ -441,52 +178,34 @@
                 <i class="fa-solid fa-user-graduate"></i>
                 <h2>Académico y Control</h2>
             </div>
+
+            <div class="form-registro">
+                <h3><i class="fa-solid fa-user-plus"></i> Registrar Nuevo Alumno</h3>
+                <input type="text" id="nombreAlumno" placeholder="Nombre completo del estudiante">
+                <select id="cursoAlumno">
+                    <option value="6TO A">6TO A</option>
+                    <option value="6TO B">6TO B</option>
+                    <option value="5TO A">5TO A</option>
+                    <option value="5TO B">5TO B</option>
+                </select>
+                <button class="btn-save" id="btnGuardar">
+                    <i class="fa-solid fa-cloud-arrow-up"></i> Guardar Alumno
+                </button>
+            </div>
+
             <div class="grid">
                 <a class="card" href="estudiantes_v4.html">
-                    <div class="card-icon">
-                        <i class="fa-solid fa-address-book"></i>
-                    </div>
+                    <div class="card-icon"><i class="fa-solid fa-address-book"></i></div>
                     <div class="card-content">
                         <p class="card-title">Directorio de Estudiantes</p>
-                        <p class="card-desc">Búsqueda de estudiantes por nombre, especialidad y curso.</p>
+                        <p class="card-desc">Búsqueda por nombre y curso.</p>
                     </div>
                 </a>
-
                 <a class="card" href="SistemaAsistencia.html">
-                    <div class="card-icon">
-                        <i class="fa-solid fa-clipboard-user"></i>
-                    </div>
+                    <div class="card-icon"><i class="fa-solid fa-clipboard-user"></i></div>
                     <div class="card-content">
                         <p class="card-title">Sistema de Asistencia</p>
-                        <p class="card-desc">Gestión y consulta de asistencia del personal o estudiantes.</p>
-                    </div>
-                </a>
-
-                <a class="card" href="entrevistas.html">
-                    <div class="card-icon">
-                        <i class="fa-solid fa-calendar-check"></i>
-                    </div>
-                    <div class="card-content">
-                        <p class="card-title">Entrevistas con Padres</p>
-                        <p class="card-desc">Programación y seguimiento de entrevistas con padres de familia.</p>
-                    </div>
-                </a>
-            </div>
-        </section>
-
-        <section class="section">
-            <div class="section-header">
-                <i class="fa-solid fa-scale-balanced"></i>
-                <h2>Normativa</h2>
-            </div>
-            <div class="grid">
-                <a class="card" href="reglamentos.html">
-                    <div class="card-icon">
-                        <i class="fa-solid fa-file-contract"></i>
-                    </div>
-                    <div class="card-content">
-                        <p class="card-title">Reglamentos</p>
-                        <p class="card-desc">Acceso directo a reglamentos y lineamientos institucionales.</p>
+                        <p class="card-desc">Gestión de faltas y atrasos.</p>
                     </div>
                 </a>
             </div>
@@ -505,24 +224,46 @@
             }
         }
     </script>
+
     <script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
-  // Your web app's Firebase configuration
-  const firebaseConfig = {
-    apiKey: "AIzaSyBesNbvH0KBUVs0qag0bVtbPOC1d7fxL7o",
-    authDomain: "tiquipayabth.firebaseapp.com",
-    projectId: "tiquipayabth",
-    storageBucket: "tiquipayabth.firebasestorage.app",
-    messagingSenderId: "603614649926",
-    appId: "1:603614649926:web:7a46cc90fe244fc76fb447"
-  };
+        const firebaseConfig = {
+            apiKey: "AIzaSyBesNbvH0KBUVs0qag0bVtbPOC1d7fxL7o",
+            authDomain: "tiquipayabth.firebaseapp.com",
+            projectId: "tiquipayabth",
+            storageBucket: "tiquipayabth.firebasestorage.app",
+            messagingSenderId: "603614649926",
+            appId: "1:603614649926:web:7a46cc90fe244fc76fb447"
+        };
 
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-</script>
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Lógica para guardar
+        document.getElementById('btnGuardar').addEventListener('click', async () => {
+            const nombre = document.getElementById('nombreAlumno').value;
+            const curso = document.getElementById('cursoAlumno').value;
+
+            if (!nombre) {
+                alert("Por favor escribe un nombre");
+                return;
+            }
+
+            try {
+                await addDoc(collection(db, "alumnos"), {
+                    nombre: nombre,
+                    curso: curso,
+                    fecha: new Date().toLocaleString()
+                });
+                alert("¡Alumno " + nombre + " guardado exitosamente!");
+                document.getElementById('nombreAlumno').value = "";
+            } catch (e) {
+                console.error("Error: ", e);
+                alert("Error al guardar en Firebase");
+            }
+        });
+    </script>
 </body>
 </html>
