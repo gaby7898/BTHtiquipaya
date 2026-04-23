@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Docente — Sistemas BTH</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --blue: #3b82f6; --blue-dark: #2563eb;
+            --bg: #0f1520; --surface: #1a2235; --surface2: #1e2a40;
+            --text: #f0f9ff; --muted: #93c5fd; --border: rgba(147,197,253,0.15);
+            --green: #22c55e; --red: #ef4444; --yellow: #f59e0b;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { display: flex; min-height: 100vh; background: var(--bg); font-family: 'DM Sans', sans-serif; color: var(--text); }
+
+        .sidebar {
+            width: 230px; background: var(--surface); border-right: 1px solid var(--border);
+            display: flex; flex-direction: column; padding: 1.5rem 1rem; position: fixed; height: 100vh;
+        }
+        .sidebar-brand { display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem; margin-bottom: 2rem; }
+        .sidebar-brand .icon { width: 40px; height: 40px; background: var(--blue); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+        .sidebar-brand span { font-family: 'DM Serif Display', serif; font-size: 1.05rem; }
+
+        .nav-item { display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; border-radius: 10px; cursor: pointer; transition: all 0.2s; color: rgba(240,249,255,0.5); font-size: 0.9rem; font-weight: 500; border: none; background: none; width: 100%; text-align: left; }
+        .nav-item:hover { background: rgba(255,255,255,0.05); color: var(--text); }
+        .nav-item.active { background: rgba(59,130,246,0.15); color: var(--muted); }
+        .nav-item i { width: 18px; text-align: center; }
+
+        .sidebar-footer { margin-top: auto; }
+        .user-chip { background: rgba(255,255,255,0.05); border-radius: 12px; padding: 0.75rem; display: flex; align-items: center; gap: 0.75rem; }
+        .user-avatar { width: 34px; height: 34px; background: var(--blue); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem; }
+        .user-info .name { font-size: 0.85rem; font-weight: 600; }
+        .user-info .role { font-size: 0.7rem; color: var(--muted); }
+        .btn-logout { background: none; border: none; color: rgba(240,249,255,0.3); cursor: pointer; margin-left: auto; }
+        .btn-logout:hover { color: var(--red); }
+
+        .main { margin-left: 230px; flex: 1; padding: 2rem; }
+        .topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; }
+        .topbar h1 { font-family: 'DM Serif Display', serif; font-size: 1.8rem; }
+        .badge { background: rgba(59,130,246,0.15); color: var(--muted); padding: 0.3rem 0.75rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600; border: 1px solid var(--border); }
+
+        .stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 1rem; margin-bottom: 2rem; }
+        .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 1.25rem; }
+        .stat-card .label { font-size: 0.8rem; color: var(--muted); opacity: 0.7; margin-bottom: 0.5rem; }
+        .stat-card .value { font-size: 2rem; font-weight: 700; font-family: 'DM Serif Display', serif; }
+
+        .tab-nav { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0; }
+        .tab-btn { background: none; border: none; color: rgba(240,249,255,0.4); padding: 0.6rem 1.25rem; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 500; border-bottom: 2px solid transparent; transition: all 0.2s; margin-bottom: -1px; }
+        .tab-btn.active { color: var(--muted); border-bottom-color: var(--blue); }
+        .tab-panel { display: none; }
+        .tab-panel.active { display: block; }
+
+        .panel { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 1.5rem; margin-bottom: 1.5rem; }
+        .panel-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; }
+        .panel-title { font-size: 1rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem; }
+
+        .form-row { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+        .form-row input, .form-row select { flex: 1; min-width: 150px; padding: 0.7rem 1rem; background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 10px; color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 0.9rem; outline: none; }
+        .form-row select option { background: var(--surface2); }
+
+        .btn { padding: 0.7rem 1.25rem; border-radius: 10px; border: none; font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 0.88rem; cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem; transition: all 0.2s; }
+        .btn-primary { background: var(--blue); color: white; }
+        .btn-primary:hover { background: var(--blue-dark); }
+
+        /* Lista asistencia rápida */
+        .asist-list { display: flex; flex-direction: column; gap: 0.5rem; }
+        .asist-item { display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 1rem; background: rgba(255,255,255,0.03); border-radius: 10px; border: 1px solid var(--border); }
+        .asist-item .est-name { font-weight: 500; }
+        .asist-btns { display: flex; gap: 0.4rem; }
+        .asist-btn { padding: 0.35rem 0.75rem; border: none; border-radius: 8px; font-size: 0.8rem; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.2s; opacity: 0.5; }
+        .asist-btn.selected { opacity: 1; }
+        .asist-btn.presente { background: rgba(34,197,94,0.15); color: #86efac; border: 1px solid rgba(34,197,94,0.3); }
+        .asist-btn.tarde { background: rgba(245,158,11,0.15); color: #fcd34d; border: 1px solid rgba(245,158,11,0.3); }
+        .asist-btn.ausente { background: rgba(239,68,68,0.15); color: #fca5a5; border: 1px solid rgba(239,68,68,0.3); }
+        .asist-btn.selected.presente { background: rgba(34,197,94,0.3); }
+        .asist-btn.selected.tarde { background: rgba(245,158,11,0.3); }
+        .asist-btn.selected.ausente { background: rgba(239,68,68,0.3); }
+
+        table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+        th { text-align: left; padding: 0.6rem 0.75rem; color: var(--muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.7; border-bottom: 1px solid var(--border); }
+        td { padding: 0.75rem; border-bottom: 1px solid rgba(147,197,253,0.07); }
+        tr:last-child td { border-bottom: none; }
+        .empty-state { text-align: center; padding: 3rem; color: rgba(240,249,255,0.3); }
+        .empty-state i { font-size: 2rem; margin-bottom: 0.75rem; display: block; }
+
+        .badge-curso { background: rgba(59,130,246,0.15); color: var(--muted); padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.78rem; font-weight: 600; }
+        .live-dot { width: 8px; height: 8px; background: var(--green); border-radius: 50%; display: inline-block; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+        .notif { position: fixed; bottom: 2rem; right: 2rem; background: var(--surface2); border: 1px solid var(--border); border-radius: 12px; padding: 0.9rem 1.25rem; display: flex; align-items: center; gap: 0.75rem; font-size: 0.88rem; transform: translateY(100px); opacity: 0; transition: all 0.3s; z-index: 999; }
+        .notif.show { transform: translateY(0); opacity: 1; }
+        .notif.ok i { color: var(--green); }
+        .notif.err i { color: var(--red); }
+
+        @media(max-width:900px){ .sidebar{display:none} .main{margin-left:0} .stats{grid-template-columns:1fr 1fr} }
+    </style>
+</head>
+<body>
+
+<aside class="sidebar">
+    <div class="sidebar-brand">
+        <div class="icon">📋</div>
+        <span>BTH Docente</span>
+    </div>
+    <button class="nav-item active" onclick="showTab('asistencia', this)"><i class="fa-solid fa-clipboard-user"></i> Asistencia</button>
+    <button class="nav-item" onclick="showTab('notas', this)"><i class="fa-solid fa-star"></i> Notas</button>
+    <button class="nav-item" onclick="showTab('historial', this)"><i class="fa-solid fa-clock-rotate-left"></i> Historial</button>
+
+    <div class="sidebar-footer">
+        <div class="user-chip">
+            <div class="user-avatar" id="avatarDoc">D</div>
+            <div class="user-info">
+                <div class="name" id="nombreDoc">Docente</div>
+                <div class="role">Docente</div>
+            </div>
+            <button class="btn-logout" onclick="cerrarSesion()"><i class="fa-solid fa-right-from-bracket"></i></button>
+        </div>
+    </div>
+</aside>
+
+<main class="main">
+    <div class="topbar">
+        <h1 id="pageTitle">Registro de Asistencia</h1>
+        <span class="badge"><span class="live-dot"></span> En tiempo real</span>
+    </div>
+
+    <div class="stats">
+        <div class="stat-card">
+            <div class="label">Estudiantes hoy</div>
+            <div class="value" id="statHoy">—</div>
+        </div>
+        <div class="stat-card">
+            <div class="label">Presentes</div>
+            <div class="value" style="color:#86efac" id="statPresentes">—</div>
+        </div>
+        <div class="stat-card">
+            <div class="label">Ausentes</div>
+            <div class="value" style="color:#fca5a5" id="statAusentes">—</div>
+        </div>
+    </div>
+
+    <!-- ASISTENCIA -->
+    <div class="tab-panel active" id="tab-asistencia">
+        <div class="panel">
+            <div class="panel-header">
+                <span class="panel-title"><i class="fa-solid fa-calendar-day"></i> Pasar asistencia</span>
+                <div style="display:flex;gap:0.5rem;align-items:center">
+                    <select id="cursoFiltro" style="padding:0.5rem 0.75rem;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'DM Sans',sans-serif;outline:none">
+                        <option value="6TO A">6TO A</option>
+                        <option value="6TO B">6TO B</option>
+                        <option value="5TO A">5TO A</option>
+                        <option value="5TO B">5TO B</option>
+                    </select>
+                    <input type="date" id="fechaAsist" style="padding:0.5rem 0.75rem;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'DM Sans',sans-serif;outline:none">
+                </div>
+            </div>
+            <div class="asist-list" id="listaAsistencia">
+                <div class="empty-state"><i class="fa-solid fa-spinner fa-spin"></i>Cargando estudiantes...</div>
+            </div>
+            <div style="margin-top:1rem;display:flex;justify-content:flex-end">
+                <button class="btn btn-primary" id="btnGuardarAsist">
+                    <i class="fa-solid fa-cloud-arrow-up"></i> Guardar asistencia del día
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- NOTAS -->
+    <div class="tab-panel" id="tab-notas">
+        <div class="panel">
+            <div class="panel-header">
+                <span class="panel-title"><i class="fa-solid fa-plus"></i> Registrar nota</span>
+            </div>
+            <div class="form-row">
+                <select id="n-estudiante"><option value="">Seleccionar estudiante...</option></select>
+                <input type="text" id="n-materia" placeholder="Materia">
+                <input type="number" id="n-nota" placeholder="Nota (0-100)" min="0" max="100">
+                <input type="text" id="n-periodo" placeholder="Período (ej: 1er Bim)">
+                <button class="btn btn-primary" id="btnGuardarNota"><i class="fa-solid fa-floppy-disk"></i> Guardar</button>
+            </div>
+        </div>
+        <div class="panel">
+            <div class="panel-header"><span class="panel-title"><i class="fa-solid fa-list"></i> Notas registradas</span></div>
+            <div class="table-wrap" style="overflow-x:auto">
+                <table>
+                    <thead><tr><th>Estudiante</th><th>Materia</th><th>Período</th><th>Nota</th></tr></thead>
+                    <tbody id="tablaNotas">
+                        <tr><td colspan="4"><div class="empty-state"><i class="fa-solid fa-spinner fa-spin"></i>Cargando...</div></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- HISTORIAL -->
+    <div class="tab-panel" id="tab-historial">
+        <div class="panel">
+            <div class="panel-header"><span class="panel-title"><i class="fa-solid fa-clock-rotate-left"></i> Historial de asistencia registrada</span></div>
+            <div style="overflow-x:auto">
+                <table>
+                    <thead><tr><th>Fecha</th><th>Estudiante</th><th>Curso</th><th>Estado</th></tr></thead>
+                    <tbody id="tablaHistorial">
+                        <tr><td colspan="4"><div class="empty-state"><i class="fa-solid fa-spinner fa-spin"></i>Cargando...</div></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</main>
+
+<div class="notif ok" id="notif">
+    <i class="fa-solid fa-circle-check"></i>
+    <span id="notifMsg">Guardado</span>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+    import { getFirestore, collection, doc, getDoc, addDoc, onSnapshot, query, where } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyBesNbvH0KBUVs0qag0bVtbPOC1d7fxL7o",
+        authDomain: "tiquipayabth.firebaseapp.com",
+        projectId: "tiquipayabth",
+        storageBucket: "tiquipayabth.firebasestorage.app",
+        messagingSenderId: "603614649926",
+        appId: "1:603614649926:web:7a46cc90fe244fc76fb447"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    let docenteNombre = '';
+    let estadosAsistencia = {}; // { estudianteId: 'Presente'|'Tarde'|'Ausente' }
+    let estudiantesCache = [];
+
+    // Fecha de hoy por defecto
+    document.getElementById('fechaAsist').valueAsDate = new Date();
+
+    onAuthStateChanged(auth, async (user) => {
+        if (!user) { window.location.href = 'login.html'; return; }
+        const snap = await getDoc(doc(db, "usuarios", user.uid));
+        if (!snap.exists() || snap.data().rol !== 'docente') { window.location.href = 'login.html'; return; }
+        const data = snap.data();
+        docenteNombre = data.nombre || 'Docente';
+        document.getElementById('nombreDoc').textContent = docenteNombre;
+        document.getElementById('avatarDoc').textContent = docenteNombre[0].toUpperCase();
+        iniciar();
+    });
+
+    function mostrarNotif(msg, tipo = 'ok') {
+        const n = document.getElementById('notif');
+        document.getElementById('notifMsg').textContent = msg;
+        n.className = `notif ${tipo} show`;
+        n.querySelector('i').className = tipo === 'ok' ? 'fa-solid fa-circle-check' : 'fa-solid fa-circle-exclamation';
+        setTimeout(() => n.classList.remove('show'), 3500);
+    }
+
+    window.showTab = function(tab, btn) {
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+        document.getElementById(`tab-${tab}`).classList.add('active');
+        btn.classList.add('active');
+        const titles = { asistencia:'Registro de Asistencia', notas:'Gestión de Notas', historial:'Historial' };
+        document.getElementById('pageTitle').textContent = titles[tab];
+    };
+
+    function iniciar() {
+        cargarEstudiantes();
+        escucharNotas();
+        escucharHistorial();
+        document.getElementById('cursoFiltro').addEventListener('change', cargarEstudiantes);
+    }
+
+    function cargarEstudiantes() {
+        const curso = document.getElementById('cursoFiltro').value;
+        onSnapshot(query(collection(db, "estudiantes"), where("curso", "==", curso)), snap => {
+            estudiantesCache = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+            document.getElementById('statHoy').textContent = estudiantesCache.length;
+            renderListaAsistencia();
+
+            // Llenar select de notas
+            const sel = document.getElementById('n-estudiante');
+            sel.innerHTML = '<option value="">Seleccionar estudiante...</option>' +
+                estudiantesCache.map(e => `<option value="${e.id}">${e.nombre}</option>`).join('');
+        });
+    }
+
+    function renderListaAsistencia() {
+        const lista = document.getElementById('listaAsistencia');
+        if (!estudiantesCache.length) {
+            lista.innerHTML = `<div class="empty-state"><i class="fa-solid fa-user-graduate"></i>No hay estudiantes en este curso</div>`;
+            return;
+        }
+        lista.innerHTML = estudiantesCache.map(e => `
+            <div class="asist-item">
+                <span class="est-name">${e.nombre}</span>
+                <div class="asist-btns">
+                    <button class="asist-btn presente ${estadosAsistencia[e.id]==='Presente'?'selected':''}"
+                        onclick="setEstado('${e.id}','Presente',this)">✓ Presente</button>
+                    <button class="asist-btn tarde ${estadosAsistencia[e.id]==='Tarde'?'selected':''}"
+                        onclick="setEstado('${e.id}','Tarde',this)">⏰ Tarde</button>
+                    <button class="asist-btn ausente ${estadosAsistencia[e.id]==='Ausente'?'selected':''}"
+                        onclick="setEstado('${e.id}','Ausente',this)">✗ Ausente</button>
+                </div>
+            </div>
+        `).join('');
+        actualizarStats();
+    }
+
+    window.setEstado = function(id, estado, btn) {
+        estadosAsistencia[id] = estado;
+        const item = btn.closest('.asist-item');
+        item.querySelectorAll('.asist-btn').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        actualizarStats();
+    };
+
+    function actualizarStats() {
+        const vals = Object.values(estadosAsistencia);
+        document.getElementById('statPresentes').textContent = vals.filter(v => v === 'Presente').length;
+        document.getElementById('statAusentes').textContent = vals.filter(v => v === 'Ausente').length;
+    }
+
+    document.getElementById('btnGuardarAsist').addEventListener('click', async () => {
+        const fecha = document.getElementById('fechaAsist').value;
+        const curso = document.getElementById('cursoFiltro').value;
+        if (!fecha) { mostrarNotif('Selecciona una fecha', 'err'); return; }
+        if (!Object.keys(estadosAsistencia).length) { mostrarNotif('Marca el estado de al menos un estudiante', 'err'); return; }
+
+        try {
+            for (const est of estudiantesCache) {
+                const estado = estadosAsistencia[est.id];
+                if (!estado) continue;
+                await addDoc(collection(db, "asistencia"), {
+                    estudianteId: est.id, nombreEstudiante: est.nombre, curso,
+                    fecha, estado, docente: docenteNombre,
+                    timestamp: Date.now()
+                });
+            }
+            mostrarNotif('Asistencia guardada correctamente');
+            estadosAsistencia = {};
+            renderListaAsistencia();
+        } catch(e) { mostrarNotif('Error al guardar', 'err'); }
+    });
+
+    // NOTAS
+    function escucharNotas() {
+        onSnapshot(collection(db, "notas"), snap => {
+            const tbody = document.getElementById('tablaNotas');
+            if (snap.empty) { tbody.innerHTML = `<tr><td colspan="4"><div class="empty-state"><i class="fa-solid fa-star"></i>Sin notas</div></td></tr>`; return; }
+            tbody.innerHTML = snap.docs.map(d => {
+                const n = d.data();
+                const color = n.nota >= 51 ? '#86efac' : '#fca5a5';
+                return `<tr><td>${n.nombreEstudiante||'—'}</td><td>${n.materia}</td><td>${n.periodo}</td><td style="color:${color};font-weight:700">${n.nota}</td></tr>`;
+            }).join('');
+        });
+    }
+
+    document.getElementById('btnGuardarNota').addEventListener('click', async () => {
+        const estId = document.getElementById('n-estudiante').value;
+        const materia = document.getElementById('n-materia').value.trim();
+        const nota = parseInt(document.getElementById('n-nota').value);
+        const periodo = document.getElementById('n-periodo').value.trim();
+        if (!estId || !materia || isNaN(nota) || !periodo) { mostrarNotif('Completa todos los campos', 'err'); return; }
+        const est = estudiantesCache.find(e => e.id === estId);
+        try {
+            await addDoc(collection(db, "notas"), { estudianteId: estId, nombreEstudiante: est?.nombre || '—', materia, nota, periodo, docente: docenteNombre, fecha: new Date().toLocaleDateString('es-BO') });
+            mostrarNotif('Nota guardada');
+            ['n-materia','n-nota','n-periodo'].forEach(id => document.getElementById(id).value = '');
+        } catch(e) { mostrarNotif('Error al guardar', 'err'); }
+    });
+
+    // HISTORIAL
+    function escucharHistorial() {
+        onSnapshot(collection(db, "asistencia"), snap => {
+            const tbody = document.getElementById('tablaHistorial');
+            if (snap.empty) { tbody.innerHTML = `<tr><td colspan="4"><div class="empty-state"><i class="fa-solid fa-clock-rotate-left"></i>Sin registros</div></td></tr>`; return; }
+            const sorted = snap.docs.sort((a,b) => (b.data().timestamp||0) - (a.data().timestamp||0)).slice(0,50);
+            tbody.innerHTML = sorted.map(d => {
+                const a = d.data();
+                const color = a.estado === 'Presente' ? '#86efac' : a.estado === 'Tarde' ? '#fcd34d' : '#fca5a5';
+                return `<tr><td>${a.fecha}</td><td>${a.nombreEstudiante}</td><td><span class="badge-curso">${a.curso}</span></td><td style="color:${color};font-weight:600">${a.estado}</td></tr>`;
+            }).join('');
+        });
+    }
+
+    window.cerrarSesion = async () => {
+        if (confirm('¿Cerrar sesión?')) { await signOut(auth); window.location.href = 'login.html'; }
+    };
+</script>
+</body>
+</html>

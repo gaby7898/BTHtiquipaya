@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Portal — Sistemas BTH</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --green: #22c55e; --green-dark: #16a34a;
+            --bg: #0f1a14; --surface: #1a2e1e; --surface2: #1e3522;
+            --text: #f0fdf4; --muted: #86efac; --border: rgba(134,239,172,0.15);
+            --red: #ef4444; --yellow: #f59e0b; --blue: #3b82f6;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { min-height: 100vh; background: var(--bg); font-family: 'DM Sans', sans-serif; color: var(--text); }
+
+        /* HEADER */
+        .header {
+            background: var(--surface); border-bottom: 1px solid var(--border);
+            padding: 1rem 2rem; display: flex; align-items: center; justify-content: space-between;
+            position: sticky; top: 0; z-index: 100;
+        }
+        .header-brand { display: flex; align-items: center; gap: 0.75rem; }
+        .header-brand .icon { width: 38px; height: 38px; background: var(--green); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; }
+        .header-brand span { font-family: 'DM Serif Display', serif; font-size: 1.1rem; }
+
+        .user-info-header { display: flex; align-items: center; gap: 0.75rem; }
+        .user-avatar { width: 36px; height: 36px; background: var(--green-dark); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 700; }
+        .user-details .name { font-size: 0.88rem; font-weight: 600; }
+        .user-details .curso { font-size: 0.75rem; color: var(--muted); }
+        .btn-logout { background: none; border: none; color: rgba(240,253,244,0.4); cursor: pointer; padding: 0.5rem; margin-left: 0.5rem; }
+        .btn-logout:hover { color: var(--red); }
+
+        /* MAIN */
+        .main { max-width: 900px; margin: 0 auto; padding: 2rem; }
+
+        /* HERO */
+        .hero { background: linear-gradient(135deg, var(--green-dark), #15803d); border-radius: 20px; padding: 2rem; margin-bottom: 2rem; position: relative; overflow: hidden; }
+        .hero::after { content: '🎓'; position: absolute; right: 2rem; top: 50%; transform: translateY(-50%); font-size: 5rem; opacity: 0.15; }
+        .hero h2 { font-family: 'DM Serif Display', serif; font-size: 1.8rem; margin-bottom: 0.25rem; }
+        .hero p { color: rgba(240,253,244,0.7); font-size: 0.95rem; }
+
+        /* STATS */
+        .stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 1rem; margin-bottom: 2rem; }
+        .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 1.25rem; text-align: center; }
+        .stat-card .icon { font-size: 1.5rem; margin-bottom: 0.5rem; }
+        .stat-card .value { font-size: 2rem; font-weight: 700; font-family: 'DM Serif Display', serif; }
+        .stat-card .label { font-size: 0.78rem; color: var(--muted); opacity: 0.7; margin-top: 0.25rem; }
+
+        /* TABS */
+        .tab-nav { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border); }
+        .tab-btn { background: none; border: none; color: rgba(240,253,244,0.4); padding: 0.6rem 1.25rem; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 500; border-bottom: 2px solid transparent; transition: all 0.2s; margin-bottom: -1px; }
+        .tab-btn.active { color: var(--muted); border-bottom-color: var(--green); }
+        .tab-panel { display: none; }
+        .tab-panel.active { display: block; }
+
+        /* NOTAS GRID */
+        .notas-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px,1fr)); gap: 1rem; }
+        .nota-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 1.25rem; }
+        .nota-card .materia { font-weight: 600; font-size: 0.9rem; margin-bottom: 0.25rem; }
+        .nota-card .periodo { font-size: 0.75rem; color: var(--muted); opacity: 0.7; margin-bottom: 0.75rem; }
+        .nota-badge { display: inline-block; padding: 0.4rem 1rem; border-radius: 20px; font-size: 1.4rem; font-weight: 700; font-family: 'DM Serif Display', serif; }
+        .nota-ok { background: rgba(34,197,94,0.15); color: #86efac; }
+        .nota-mal { background: rgba(239,68,68,0.15); color: #fca5a5; }
+
+        /* ASISTENCIA */
+        .asist-list { display: flex; flex-direction: column; gap: 0.5rem; }
+        .asist-item { display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 1rem; background: var(--surface); border-radius: 12px; border: 1px solid var(--border); }
+        .asist-fecha { font-size: 0.85rem; color: rgba(240,253,244,0.6); }
+        .asist-estado { font-weight: 600; font-size: 0.85rem; padding: 0.2rem 0.6rem; border-radius: 20px; }
+        .estado-presente { background: rgba(34,197,94,0.15); color: #86efac; }
+        .estado-tarde { background: rgba(245,158,11,0.15); color: #fcd34d; }
+        .estado-ausente { background: rgba(239,68,68,0.15); color: #fca5a5; }
+
+        /* MATERIALES */
+        .materiales-list { display: flex; flex-direction: column; gap: 0.75rem; }
+        .material-item { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.25rem; display: flex; align-items: center; gap: 1rem; }
+        .material-icon { width: 40px; height: 40px; background: rgba(59,130,246,0.15); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #93c5fd; font-size: 1.1rem; flex-shrink: 0; }
+        .material-title { font-weight: 600; font-size: 0.9rem; }
+        .material-desc { font-size: 0.78rem; color: rgba(240,253,244,0.5); margin-top: 0.15rem; }
+
+        .empty-state { text-align: center; padding: 3rem; color: rgba(240,253,244,0.3); }
+        .empty-state i { font-size: 2rem; margin-bottom: 0.75rem; display: block; }
+
+        .live-dot { width: 8px; height: 8px; background: var(--green); border-radius: 50%; display: inline-block; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+        @media(max-width:700px){ .stats{grid-template-columns:1fr 1fr} .notas-grid{grid-template-columns:1fr 1fr} }
+    </style>
+</head>
+<body>
+
+<header class="header">
+    <div class="header-brand">
+        <div class="icon">🎓</div>
+        <span>BTH Tiquipaya</span>
+    </div>
+    <div class="user-info-header">
+        <div class="user-avatar" id="avatarEst">E</div>
+        <div class="user-details">
+            <div class="name" id="nombreEst">Estudiante</div>
+            <div class="curso" id="cursoEst">—</div>
+        </div>
+        <span style="font-size:0.75rem;background:rgba(134,239,172,0.1);color:var(--muted);padding:0.2rem 0.5rem;border-radius:20px;border:1px solid var(--border);display:flex;align-items:center;gap:0.3rem"><span class="live-dot"></span> En vivo</span>
+        <button class="btn-logout" onclick="cerrarSesion()"><i class="fa-solid fa-right-from-bracket"></i></button>
+    </div>
+</header>
+
+<main class="main">
+    <!-- HERO -->
+    <div class="hero">
+        <h2>¡Hola, <span id="heroNombre">estudiante</span>!</h2>
+        <p>Aquí puedes ver tus notas, asistencia y materiales al instante.</p>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats">
+        <div class="stat-card">
+            <div class="icon">⭐</div>
+            <div class="value" id="statPromedio">—</div>
+            <div class="label">Promedio general</div>
+        </div>
+        <div class="stat-card">
+            <div class="icon">✅</div>
+            <div class="value" id="statAsistencia">—</div>
+            <div class="label">% Asistencia</div>
+        </div>
+        <div class="stat-card">
+            <div class="icon">📚</div>
+            <div class="value" id="statMaterias">—</div>
+            <div class="label">Materias registradas</div>
+        </div>
+    </div>
+
+    <!-- TABS -->
+    <div class="tab-nav">
+        <button class="tab-btn active" onclick="showTab('notas', this)"><i class="fa-solid fa-star"></i> Mis Notas</button>
+        <button class="tab-btn" onclick="showTab('asistencia', this)"><i class="fa-solid fa-clipboard-user"></i> Mi Asistencia</button>
+        <button class="tab-btn" onclick="showTab('materiales', this)"><i class="fa-solid fa-book"></i> Materiales</button>
+    </div>
+
+    <!-- NOTAS -->
+    <div class="tab-panel active" id="tab-notas">
+        <div class="notas-grid" id="notasGrid">
+            <div class="empty-state" style="grid-column:1/-1"><i class="fa-solid fa-spinner fa-spin"></i>Cargando notas...</div>
+        </div>
+    </div>
+
+    <!-- ASISTENCIA -->
+    <div class="tab-panel" id="tab-asistencia">
+        <div class="asist-list" id="asistList">
+            <div class="empty-state"><i class="fa-solid fa-spinner fa-spin"></i>Cargando...</div>
+        </div>
+    </div>
+
+    <!-- MATERIALES -->
+    <div class="tab-panel" id="tab-materiales">
+        <div class="materiales-list" id="materialesList">
+            <div class="empty-state"><i class="fa-solid fa-spinner fa-spin"></i>Cargando...</div>
+        </div>
+    </div>
+</main>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+    import { getFirestore, collection, doc, getDoc, onSnapshot, query, where } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyBesNbvH0KBUVs0qag0bVtbPOC1d7fxL7o",
+        authDomain: "tiquipayabth.firebaseapp.com",
+        projectId: "tiquipayabth",
+        storageBucket: "tiquipayabth.firebasestorage.app",
+        messagingSenderId: "603614649926",
+        appId: "1:603614649926:web:7a46cc90fe244fc76fb447"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    let estudianteDocId = null;
+
+    onAuthStateChanged(auth, async (user) => {
+        if (!user) { window.location.href = 'login.html'; return; }
+        const snap = await getDoc(doc(db, "usuarios", user.uid));
+        if (!snap.exists() || snap.data().rol !== 'estudiante') { window.location.href = 'login.html'; return; }
+        const data = snap.data();
+
+        document.getElementById('nombreEst').textContent = data.nombre || 'Estudiante';
+        document.getElementById('heroNombre').textContent = (data.nombre || 'estudiante').split(' ')[0];
+        document.getElementById('cursoEst').textContent = data.curso || '—';
+        document.getElementById('avatarEst').textContent = (data.nombre || 'E')[0].toUpperCase();
+
+        // Buscar el documento del estudiante en la colección "estudiantes"
+        const estSnap = await getDocs_byNombre(data.nombre);
+        estudianteDocId = estSnap;
+
+        if (estudianteDocId) {
+            escucharNotas(estudianteDocId);
+            escucharAsistencia(estudianteDocId);
+        }
+        escucharMateriales();
+    });
+
+    async function getDocs_byNombre(nombre) {
+        // Buscar estudiante por nombre para obtener su ID en la colección "estudiantes"
+        return new Promise(resolve => {
+            onSnapshot(collection(db, "estudiantes"), snap => {
+                const found = snap.docs.find(d => d.data().nombre === nombre);
+                resolve(found ? found.id : null);
+            });
+        });
+    }
+
+    function escucharNotas(estId) {
+        onSnapshot(query(collection(db, "notas"), where("estudianteId", "==", estId)), snap => {
+            const grid = document.getElementById('notasGrid');
+            if (snap.empty) {
+                grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><i class="fa-solid fa-star"></i>Aún no tienes notas registradas</div>`;
+                document.getElementById('statPromedio').textContent = '—';
+                document.getElementById('statMaterias').textContent = '0';
+                return;
+            }
+            const notas = snap.docs.map(d => d.data());
+            const promedio = Math.round(notas.reduce((s, n) => s + n.nota, 0) / notas.length);
+            const materias = [...new Set(notas.map(n => n.materia))].length;
+            document.getElementById('statPromedio').textContent = promedio;
+            document.getElementById('statMaterias').textContent = materias;
+
+            grid.innerHTML = notas.map(n => `
+                <div class="nota-card">
+                    <div class="materia">${n.materia}</div>
+                    <div class="periodo">${n.periodo} · ${n.fecha || ''}</div>
+                    <span class="nota-badge ${n.nota >= 51 ? 'nota-ok' : 'nota-mal'}">${n.nota}</span>
+                </div>
+            `).join('');
+        });
+    }
+
+    function escucharAsistencia(estId) {
+        onSnapshot(query(collection(db, "asistencia"), where("estudianteId", "==", estId)), snap => {
+            const list = document.getElementById('asistList');
+            if (snap.empty) {
+                list.innerHTML = `<div class="empty-state"><i class="fa-solid fa-clipboard-user"></i>Sin registros de asistencia</div>`;
+                document.getElementById('statAsistencia').textContent = '—';
+                return;
+            }
+            const registros = snap.docs.map(d => d.data()).sort((a,b) => (b.timestamp||0)-(a.timestamp||0));
+            const presentes = registros.filter(r => r.estado === 'Presente').length;
+            const pct = Math.round((presentes / registros.length) * 100);
+            document.getElementById('statAsistencia').textContent = pct + '%';
+
+            list.innerHTML = registros.map(r => `
+                <div class="asist-item">
+                    <div>
+                        <div style="font-weight:600;font-size:0.88rem">${r.fecha}</div>
+                        <div class="asist-fecha">${r.curso} · Docente: ${r.docente || '—'}</div>
+                    </div>
+                    <span class="asist-estado estado-${r.estado.toLowerCase()}">${r.estado}</span>
+                </div>
+            `).join('');
+        });
+    }
+
+    function escucharMateriales() {
+        onSnapshot(collection(db, "materiales"), snap => {
+            const list = document.getElementById('materialesList');
+            if (snap.empty) {
+                list.innerHTML = `<div class="empty-state"><i class="fa-solid fa-book"></i>Aún no hay materiales publicados</div>`;
+                return;
+            }
+            list.innerHTML = snap.docs.map(d => {
+                const m = d.data();
+                return `<div class="material-item">
+                    <div class="material-icon"><i class="fa-solid fa-file-lines"></i></div>
+                    <div>
+                        <div class="material-title">${m.titulo}</div>
+                        <div class="material-desc">${m.descripcion || ''} · ${m.fecha || ''}</div>
+                    </div>
+                </div>`;
+            }).join('');
+        });
+    }
+
+    window.showTab = function(tab, btn) {
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(`tab-${tab}`).classList.add('active');
+        btn.classList.add('active');
+    };
+
+    window.cerrarSesion = async () => {
+        if (confirm('¿Cerrar sesión?')) { await signOut(auth); window.location.href = 'login.html'; }
+    };
+</script>
+</body>
+</html>

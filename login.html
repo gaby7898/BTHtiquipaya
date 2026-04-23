@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistemas BTH - Acceso</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --teal: #0d9488;
+            --teal-dark: #0f766e;
+            --teal-deeper: #115e59;
+            --cream: #f0fdfa;
+            --gold: #f59e0b;
+            --red: #ef4444;
+            --text: #134e4a;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            background: #0f1a19;
+            font-family: 'DM Sans', sans-serif;
+            overflow: hidden;
+        }
+
+        /* Panel izquierdo decorativo */
+        .panel-left {
+            flex: 1;
+            background: linear-gradient(145deg, #0f766e 0%, #0d9488 40%, #134e4a 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .panel-left::before {
+            content: '';
+            position: absolute;
+            width: 500px; height: 500px;
+            border-radius: 50%;
+            border: 60px solid rgba(255,255,255,0.05);
+            top: -100px; left: -100px;
+        }
+        .panel-left::after {
+            content: '';
+            position: absolute;
+            width: 300px; height: 300px;
+            border-radius: 50%;
+            border: 40px solid rgba(255,255,255,0.07);
+            bottom: -50px; right: -50px;
+        }
+
+        .panel-left-content { position: relative; z-index: 2; text-align: center; color: white; }
+
+        .school-badge {
+            width: 90px; height: 90px;
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 2.5rem;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .panel-left h1 {
+            font-family: 'DM Serif Display', serif;
+            font-size: 2.4rem;
+            line-height: 1.2;
+            margin-bottom: 0.75rem;
+        }
+
+        .panel-left p {
+            font-size: 1rem;
+            opacity: 0.75;
+            max-width: 280px;
+            line-height: 1.6;
+        }
+
+        .roles-preview {
+            margin-top: 3rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            width: 100%;
+            max-width: 280px;
+        }
+
+        .role-chip {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 12px;
+            padding: 0.75rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.9);
+        }
+
+        .role-chip i { opacity: 0.8; width: 18px; }
+
+        /* Panel derecho - formulario */
+        .panel-right {
+            width: 460px;
+            background: #0f1a19;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .login-box {
+            width: 100%;
+            max-width: 380px;
+            animation: slideIn 0.6s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .login-box h2 {
+            font-family: 'DM Serif Display', serif;
+            font-size: 2rem;
+            color: #f0fdfa;
+            margin-bottom: 0.4rem;
+        }
+
+        .login-box .sub {
+            color: #5eead4;
+            font-size: 0.9rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .field {
+            margin-bottom: 1.25rem;
+        }
+
+        .field label {
+            display: block;
+            color: #99f6e4;
+            font-size: 0.8rem;
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        .field-wrap {
+            position: relative;
+        }
+
+        .field-wrap i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #5eead4;
+            font-size: 0.95rem;
+        }
+
+        .field input {
+            width: 100%;
+            padding: 0.9rem 1rem 0.9rem 2.8rem;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(94, 234, 212, 0.2);
+            border-radius: 12px;
+            color: #f0fdfa;
+            font-size: 0.95rem;
+            font-family: 'DM Sans', sans-serif;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .field input:focus {
+            border-color: #14b8a6;
+            background: rgba(255,255,255,0.08);
+            box-shadow: 0 0 0 3px rgba(20,184,166,0.15);
+        }
+
+        .field input::placeholder { color: rgba(240,253,250,0.3); }
+
+        .btn-login {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #0d9488, #14b8a6);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            font-family: 'DM Sans', sans-serif;
+            cursor: pointer;
+            transition: all 0.25s;
+            margin-top: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn-login:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(13,148,136,0.4); }
+        .btn-login:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+        .error-box {
+            background: rgba(239,68,68,0.1);
+            border: 1px solid rgba(239,68,68,0.3);
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            color: #fca5a5;
+            font-size: 0.85rem;
+            margin-top: 1rem;
+            display: none;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .error-box.show { display: flex; }
+
+        @media (max-width: 768px) {
+            body { flex-direction: column; overflow: auto; }
+            .panel-left { display: none; }
+            .panel-right { width: 100%; min-height: 100vh; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Panel izquierdo -->
+    <div class="panel-left">
+        <div class="panel-left-content">
+            <div class="school-badge">🏫</div>
+            <h1>Sistemas BTH<br>Tiquipaya</h1>
+            <p>Plataforma de gestión escolar en tiempo real para el Bachillerato Técnico Humanístico</p>
+
+            <div class="roles-preview">
+                <div class="role-chip">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <span><strong>Admin</strong> — Control total del sistema</span>
+                </div>
+                <div class="role-chip">
+                    <i class="fa-solid fa-chalkboard-teacher"></i>
+                    <span><strong>Docente</strong> — Asistencia y notas</span>
+                </div>
+                <div class="role-chip">
+                    <i class="fa-solid fa-user-graduate"></i>
+                    <span><strong>Estudiante</strong> — Ver mis registros</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Panel derecho -->
+    <div class="panel-right">
+        <div class="login-box">
+            <h2>Bienvenido</h2>
+            <p class="sub">Inicia sesión para continuar</p>
+
+            <div class="field">
+                <label>Correo electrónico</label>
+                <div class="field-wrap">
+                    <i class="fa-solid fa-envelope"></i>
+                    <input type="email" id="email" placeholder="tu@correo.com" autocomplete="email">
+                </div>
+            </div>
+
+            <div class="field">
+                <label>Contraseña</label>
+                <div class="field-wrap">
+                    <i class="fa-solid fa-lock"></i>
+                    <input type="password" id="password" placeholder="••••••••" autocomplete="current-password">
+                </div>
+            </div>
+
+            <button class="btn-login" id="btnLogin">
+                <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                Ingresar al sistema
+            </button>
+
+            <div class="error-box" id="errorBox">
+                <i class="fa-solid fa-circle-exclamation"></i>
+                <span id="errorMsg">Correo o contraseña incorrectos.</span>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBesNbvH0KBUVs0qag0bVtbPOC1d7fxL7o",
+            authDomain: "tiquipayabth.firebaseapp.com",
+            projectId: "tiquipayabth",
+            storageBucket: "tiquipayabth.firebasestorage.app",
+            messagingSenderId: "603614649926",
+            appId: "1:603614649926:web:7a46cc90fe244fc76fb447"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Si ya está logueado, redirigir automáticamente
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                await redirigirSegunRol(user.uid);
+            }
+        });
+
+        async function redirigirSegunRol(uid) {
+            const snap = await getDoc(doc(db, "usuarios", uid));
+            if (snap.exists()) {
+                const rol = snap.data().rol;
+                if (rol === 'admin') window.location.href = 'dashboard-admin.html';
+                else if (rol === 'docente') window.location.href = 'dashboard-docente.html';
+                else if (rol === 'estudiante') window.location.href = 'dashboard-estudiante.html';
+            }
+        }
+
+        const btn = document.getElementById('btnLogin');
+        const errorBox = document.getElementById('errorBox');
+        const errorMsg = document.getElementById('errorMsg');
+
+        // Login con Enter
+        document.getElementById('password').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') btn.click();
+        });
+
+        btn.addEventListener('click', async () => {
+            const email = document.getElementById('email').value.trim();
+            const pass = document.getElementById('password').value.trim();
+            errorBox.classList.remove('show');
+
+            if (!email || !pass) {
+                errorMsg.textContent = 'Por favor completa todos los campos.';
+                errorBox.classList.add('show');
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Verificando...';
+
+            try {
+                const cred = await signInWithEmailAndPassword(auth, email, pass);
+                await redirigirSegunRol(cred.user.uid);
+            } catch (e) {
+                errorMsg.textContent = 'Correo o contraseña incorrectos.';
+                errorBox.classList.add('show');
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa-solid fa-arrow-right-to-bracket"></i> Ingresar al sistema';
+            }
+        });
+    </script>
+</body>
+</html>
